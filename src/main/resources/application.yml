@@ -29,6 +29,11 @@ spring:
             redirect-uri: http://127.0.0.1:8080/login/oauth2/code/gitee
             scope:
               - user_info
+          github:
+            client-id: de2a658c84ef67e4b1ca
+            client-secret: 500bf96d6dbfcfc62537eab38a9a5103e1486c7f
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:8080/login/oauth2/code/github
 
         provider:
           moyu:

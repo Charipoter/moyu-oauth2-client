@@ -35,6 +35,6 @@ public abstract class AbstractAttributesBasedUserInfoConverter extends AbstractU
             log.warn("用户属性解析失败：" + key);
             throw new UnexpectedException("用户属性解析失败");
         }
-        return (String) attributes.get(key);
+        return attributes.get(key).toString();
     }
 }
