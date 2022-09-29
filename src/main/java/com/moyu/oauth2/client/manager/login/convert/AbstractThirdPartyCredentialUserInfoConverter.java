@@ -8,7 +8,10 @@ public abstract class AbstractThirdPartyCredentialUserInfoConverter extends Abst
 
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    AbstractThirdPartyCredentialUserInfoConverter(OAuth2AuthorizedClientService authorizedClientService) {
+    AbstractThirdPartyCredentialUserInfoConverter(OAuth2AuthorizedClientService authorizedClientService,
+                                                  AttributesBasedUserInfoKeyProvider keyProvider) {
+
+        super(keyProvider);
         this.authorizedClientService = authorizedClientService;
     }
     @Override

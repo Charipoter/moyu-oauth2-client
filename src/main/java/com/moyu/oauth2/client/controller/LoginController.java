@@ -1,7 +1,7 @@
 package com.moyu.oauth2.client.controller;
 
 import com.moyu.oauth2.client.common.http.R;
-import com.moyu.oauth2.client.manager.login.OAuth2LoginPostProcessorManager;
+import com.moyu.oauth2.client.manager.login.OAuth2AttributesBasedLoginPostProcessorManager;
 import com.moyu.oauth2.client.model.TokenResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @RestController
 public class LoginController {
     @Autowired
-    private OAuth2LoginPostProcessorManager loginPostProcessorManager;
+    private OAuth2AttributesBasedLoginPostProcessorManager loginPostProcessorManager;
     /**
      * 到达这里后已经认证完成了
      */

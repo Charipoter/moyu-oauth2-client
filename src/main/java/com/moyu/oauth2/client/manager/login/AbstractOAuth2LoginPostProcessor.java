@@ -74,9 +74,11 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
 
     }
 
-    protected abstract TokenResponseVo wrapperOrReGenerateToken(OAuth2AuthenticationToken authenticationToken,
-                                                                UserAuthInfo userAuthInfo,
-                                                                UserBasicInfo userBasicInfo
-                                                                );
+    private TokenResponseVo wrapperOrReGenerateToken(OAuth2AuthenticationToken authenticationToken,
+                                                     UserAuthInfo userAuthInfo,
+                                                     UserBasicInfo userBasicInfo) {
+
+        return null;
+    }
 
 }

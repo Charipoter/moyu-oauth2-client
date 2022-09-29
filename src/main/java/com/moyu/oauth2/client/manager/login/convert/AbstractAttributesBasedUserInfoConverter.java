@@ -8,26 +8,25 @@ import java.util.Map;
 
 @Slf4j
 public abstract class AbstractAttributesBasedUserInfoConverter extends AbstractUserInfoConverter {
+
+    private AttributesBasedUserInfoKeyProvider keyProvider;
+
+    AbstractAttributesBasedUserInfoConverter(AttributesBasedUserInfoKeyProvider keyProvider) {
+        this.keyProvider = keyProvider;
+    }
     @Override
     protected String resolvePrincipal(OAuth2AuthenticationToken authenticationToken, String authType) throws UnexpectedException {
-        return resolveFromAttributes(authenticationToken, getPrincipalKey());
+        return resolveFromAttributes(authenticationToken, keyProvider.getPrincipalKey());
     }
-
-    protected abstract String getPrincipalKey();
-
     @Override
     protected String resolveNickname(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
-        return resolveFromAttributes(authenticationToken, getNicknameKey());
+        return resolveFromAttributes(authenticationToken, keyProvider.getNicknameKey());
     }
-
-    protected abstract String getNicknameKey();
 
     @Override
     protected String resolveAvatar(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
-        return resolveFromAttributes(authenticationToken, getAvatarKey());
+        return resolveFromAttributes(authenticationToken, keyProvider.getAvatarKey());
     }
-
-    protected abstract String getAvatarKey();
 
     private String resolveFromAttributes(OAuth2AuthenticationToken authenticationToken, String key) throws UnexpectedException {
         Map<String, Object> attributes = authenticationToken.getPrincipal().getAttributes();
