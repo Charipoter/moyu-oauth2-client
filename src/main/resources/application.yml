@@ -1,0 +1,46 @@
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/oauth2_server?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: 2001chendi
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  security:
+    oauth2:
+      client:
+        registration:
+          moyu:
+            provider: moyu
+            client-id: messaging-client
+            client-secret: secret
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:8080/login/oauth2/code/moyu
+            scope:
+              - message.read
+              - message.write
+          gitee:
+            client-id: 5febc49a2d250c9e063fcb8ba0e06c0ecfc940db89a375a586bfeb11d30420d4
+            client-secret: 50375a3eb64caff520749ad4e8365058b0caa5574ae23c3344ec115189c62703
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization_code
+            redirect-uri: http://127.0.0.1:8080/login/oauth2/code/gitee
+            scope:
+              - user_info
+
+        provider:
+          moyu:
+            authorization-uri: http://localhost:9000/oauth2/authorize
+            token-uri: http://localhost:9000/oauth2/token
+            user-info-uri: http://localhost:8000/user/info/basic/token
+            user-name-attribute: name
+          gitee:
+            authorization-uri: https://gitee.com/oauth/authorize
+            token-uri: https://gitee.com/oauth/token
+            user-info-uri: https://gitee.com/api/v5/user
+            user-name-attribute: name
+
+server:
+  port: 8080
