@@ -1,7 +1,7 @@
-package com.moyu.oauth2.client.manager.login;
+package com.moyu.oauth2.client.manager.login.support;
 
-import com.moyu.oauth2.client.manager.login.convert.GiteeUserAuthInfoConverter;
-import com.moyu.oauth2.client.manager.login.convert.GiteeUserBasicInfoConverter;
+import com.moyu.oauth2.client.manager.login.AbstractOAuth2LoginPostProcessor;
+import com.moyu.oauth2.client.manager.login.convert.support.GiteeUserInfoConverter;
 import com.moyu.oauth2.client.model.TokenResponseVo;
 import com.moyu.oauth2.client.model.UserAuthInfo;
 import com.moyu.oauth2.client.model.UserBasicInfo;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class GiteeLoginPostProcessor extends AbstractOAuth2LoginPostProcessor {
 
     public GiteeLoginPostProcessor(OAuth2AuthorizedClientService authorizedClientService, UserAuthInfoService userAuthInfoService, UserBasicInfoService userBasicInfoService) {
-        super(new GiteeUserAuthInfoConverter(authorizedClientService), new GiteeUserBasicInfoConverter(), userAuthInfoService, userBasicInfoService);
+        super(new GiteeUserInfoConverter(authorizedClientService), userAuthInfoService, userBasicInfoService);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.moyu.oauth2.client.manager.login;
 
-import com.moyu.oauth2.client.manager.login.convert.AbstractUserAuthInfoConverter;
-import com.moyu.oauth2.client.manager.login.convert.AbstractUserBasicInfoConverter;
+import com.moyu.oauth2.client.manager.login.convert.OAuth2UserInfoConverter;
 import com.moyu.oauth2.client.model.TokenResponseVo;
 import com.moyu.oauth2.client.model.UserAuthInfo;
 import com.moyu.oauth2.client.model.UserBasicInfo;
@@ -14,17 +13,16 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 @Slf4j
 @AllArgsConstructor
 public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPostProcessor {
-    private AbstractUserAuthInfoConverter userAuthInfoConverter;
-    private AbstractUserBasicInfoConverter userBasicInfoConverter;
+
+    private OAuth2UserInfoConverter userInfoConverter;
     private UserAuthInfoService userAuthInfoService;
     private UserBasicInfoService userBasicInfoService;
     @Override
     public TokenResponseVo postProcessAfterAuthentication(OAuth2AuthenticationToken authenticationToken) {
-        assert userAuthInfoConverter != null;
-        assert userBasicInfoConverter != null;
+        assert userInfoConverter != null;
 
-        UserAuthInfo userAuthInfo = userAuthInfoConverter.convert(authenticationToken);
-        UserBasicInfo userBasicInfo = userBasicInfoConverter.convert(authenticationToken);
+        UserAuthInfo userAuthInfo = userInfoConverter.convertToUserAuthInfo(authenticationToken);
+        UserBasicInfo userBasicInfo = userInfoConverter.convertToUserBasicInfo(authenticationToken);
 
         if (userAuthInfo != null && userBasicInfo != null) {
 
