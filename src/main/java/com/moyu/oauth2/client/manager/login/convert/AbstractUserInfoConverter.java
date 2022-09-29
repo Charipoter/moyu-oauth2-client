@@ -66,7 +66,7 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
 
     protected abstract String resolveCredential(OAuth2AuthenticationToken authenticationToken,
                                                 String authType,
-                                                String authPrincipal);
+                                                String authPrincipal) throws UnexpectedException;
 
     protected abstract String resolveNickname(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException;
     protected abstract String resolveAvatar(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException;

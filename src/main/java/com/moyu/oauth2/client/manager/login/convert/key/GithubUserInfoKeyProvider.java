@@ -1,10 +1,9 @@
-package com.moyu.oauth2.client.manager.login.convert.support;
+package com.moyu.oauth2.client.manager.login.convert.key;
 
-import com.moyu.oauth2.client.manager.login.convert.AttributesBasedUserInfoKeyProvider;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GithubUserInfoKeyProvider implements AttributesBasedUserInfoKeyProvider {
+public class GithubUserInfoKeyProvider extends AbstractThirdPartyUserInfoKeyProvider {
 
     @Override
     public String getPrincipalKey() {
@@ -19,6 +18,11 @@ public class GithubUserInfoKeyProvider implements AttributesBasedUserInfoKeyProv
     @Override
     public String getAvatarKey() {
         return "avatar_url";
+    }
+
+    @Override
+    public UserInfoKeyProviderType getType() {
+        return UserInfoKeyProviderType.THIRD_PARTY;
     }
 
 }

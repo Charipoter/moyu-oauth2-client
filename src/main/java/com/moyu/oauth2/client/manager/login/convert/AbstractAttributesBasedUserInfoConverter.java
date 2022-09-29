@@ -1,5 +1,6 @@
 package com.moyu.oauth2.client.manager.login.convert;
 
+import com.moyu.oauth2.client.manager.login.convert.key.UserInfoKeyProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
@@ -9,9 +10,9 @@ import java.util.Map;
 @Slf4j
 public abstract class AbstractAttributesBasedUserInfoConverter extends AbstractUserInfoConverter {
 
-    private AttributesBasedUserInfoKeyProvider keyProvider;
+    protected UserInfoKeyProvider keyProvider;
 
-    AbstractAttributesBasedUserInfoConverter(AttributesBasedUserInfoKeyProvider keyProvider) {
+    AbstractAttributesBasedUserInfoConverter(UserInfoKeyProvider keyProvider) {
         this.keyProvider = keyProvider;
     }
     @Override
@@ -28,7 +29,7 @@ public abstract class AbstractAttributesBasedUserInfoConverter extends AbstractU
         return resolveFromAttributes(authenticationToken, keyProvider.getAvatarKey());
     }
 
-    private String resolveFromAttributes(OAuth2AuthenticationToken authenticationToken, String key) throws UnexpectedException {
+    protected String resolveFromAttributes(OAuth2AuthenticationToken authenticationToken, String key) throws UnexpectedException {
         Map<String, Object> attributes = authenticationToken.getPrincipal().getAttributes();
         if (!attributes.containsKey(key)) {
             log.warn("用户属性解析失败：" + key);

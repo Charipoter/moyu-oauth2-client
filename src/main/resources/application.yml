@@ -39,8 +39,8 @@ spring:
           moyu:
             authorization-uri: http://localhost:9000/oauth2/authorize
             token-uri: http://localhost:9000/oauth2/token
-            user-info-uri: http://localhost:8000/user/info/basic/token
-            user-name-attribute: name
+            user-info-uri: http://localhost:8000/user/details
+            user-name-attribute: id
           gitee:
             authorization-uri: https://gitee.com/oauth/authorize
             token-uri: https://gitee.com/oauth/token

@@ -1,8 +1,10 @@
 package com.moyu.oauth2.client.manager.login;
 
-import com.moyu.oauth2.client.manager.login.convert.AttributesBasedUserInfoKeyProvider;
+import com.moyu.oauth2.client.manager.login.convert.AttributesBasedLocalUserInfoConverterAdapter;
+import com.moyu.oauth2.client.manager.login.convert.key.UserInfoKeyProvider;
 import com.moyu.oauth2.client.manager.login.convert.OAuth2UserInfoConverter;
-import com.moyu.oauth2.client.manager.login.convert.UserInfoConverterAdapter;
+import com.moyu.oauth2.client.manager.login.convert.AttributesBasedThirdPartyUserInfoConverterAdapter;
+import com.moyu.oauth2.client.manager.login.convert.key.UserInfoKeyProviderType;
 import com.moyu.oauth2.client.model.TokenResponseVo;
 import com.moyu.oauth2.client.service.UserAuthInfoService;
 import com.moyu.oauth2.client.service.UserBasicInfoService;
@@ -23,18 +25,24 @@ public class OAuth2AttributesBasedLoginPostProcessorManager {
     // 不存在并发修改，使用非并发集合
     private Map<String, OAuth2LoginPostProcessor> postProcessorMap = new HashMap<>();
 
-    public OAuth2AttributesBasedLoginPostProcessorManager(List<AttributesBasedUserInfoKeyProvider> keyProviders,
+    public OAuth2AttributesBasedLoginPostProcessorManager(List<UserInfoKeyProvider> keyProviders,
                                                           OAuth2AuthorizedClientService authorizedClientService,
                                                           UserAuthInfoService userAuthInfoService,
                                                           UserBasicInfoService userBasicInfoService) {
         // 去除 OAuth2 前缀
         int suffixLength = 19;
-        for (AttributesBasedUserInfoKeyProvider keyProvider : keyProviders) {
+        for (UserInfoKeyProvider keyProvider : keyProviders) {
 
             String fullName = keyProvider.getClass().getSimpleName();
             String authType = fullName.substring(0, fullName.length() - suffixLength).toLowerCase();
 
-            OAuth2UserInfoConverter converter = new UserInfoConverterAdapter(authorizedClientService, keyProvider);
+            OAuth2UserInfoConverter converter = null;
+            if (keyProvider.getType().equals(UserInfoKeyProviderType.LOCAL)) {
+                converter = new AttributesBasedLocalUserInfoConverterAdapter(keyProvider);
+            } else if (keyProvider.getType().equals(UserInfoKeyProviderType.THIRD_PARTY)) {
+                converter = new AttributesBasedThirdPartyUserInfoConverterAdapter(authorizedClientService, keyProvider);
+            }
+
             OAuth2LoginPostProcessor postProcessor = new OAuth2LoginPostProcessorAdapter(converter, userAuthInfoService, userBasicInfoService);
 
             postProcessorMap.put(authType, postProcessor);
