@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.rmi.UnexpectedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,11 @@ public class OAuth2AttributesBasedLoginPostProcessorManager {
         }
     }
 
-    public TokenResponseVo postProcessAfterAuthentication(OAuth2AuthenticationToken authenticationToken) {
+    /**
+     * 此处负责出错时事务的回滚
+     */
+    @Transactional
+    public TokenResponseVo postProcessAfterAuthentication(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
 
         String authType = authenticationToken.getAuthorizedClientRegistrationId();
 
@@ -47,7 +53,7 @@ public class OAuth2AttributesBasedLoginPostProcessorManager {
             return postProcessorMap.get(authType).postProcessAfterAuthentication(authenticationToken);
         } else {
             log.warn("认证信息找不到适合的处理组件，考虑是否出现异常");
-            return null;
+            throw new UnsupportedOperationException("找不到适配的后置处理器");
         }
 
     }

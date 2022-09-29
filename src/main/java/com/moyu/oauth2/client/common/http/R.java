@@ -25,6 +25,10 @@ public class R {
         return r(BizCode.ERROR, null);
     }
 
+    public static R error(Object error) {
+        return r(BizCode.ERROR, error);
+    }
+
     public static R error(BizCode bizCode) {
         return r(bizCode, null);
     }

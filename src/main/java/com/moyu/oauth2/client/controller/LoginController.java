@@ -2,7 +2,6 @@ package com.moyu.oauth2.client.controller;
 
 import com.moyu.oauth2.client.common.http.R;
 import com.moyu.oauth2.client.manager.login.OAuth2AttributesBasedLoginPostProcessorManager;
-import com.moyu.oauth2.client.model.TokenResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,15 +24,13 @@ public class LoginController {
         assert loginPostProcessorManager != null : "loginPostProcessor 为 null";
 
         if (authentication instanceof OAuth2AuthenticationToken authenticationToken) {
-
-            TokenResponseVo tokenResponseVo = loginPostProcessorManager.postProcessAfterAuthentication(authenticationToken);
-
-            return R.ok(tokenResponseVo);
+            try {
+                return R.ok(loginPostProcessorManager.postProcessAfterAuthentication(authenticationToken));
+            } catch (Exception e) {
+                return R.error(e.getMessage());
+            }
         }
-
-        log.info("认证信息不符合要求，也许业务出现了问题");
-
-        return R.error();
+        return R.error("认证信息不符合要求，也许业务出现了问题");
     }
 
 }

@@ -11,7 +11,7 @@ import java.rmi.UnexpectedException;
 public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConverter {
 
     @Override
-    public UserAuthInfo convertToUserAuthInfo(OAuth2AuthenticationToken authenticationToken) {
+    public UserAuthInfo convertToUserAuthInfo(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
 
         String authType, authPrincipal, authCredential;
 
@@ -25,7 +25,7 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            return null;
+            throw new UnexpectedException(e.getMessage());
         }
 
         UserAuthInfo userAuthInfo = new UserAuthInfo();
@@ -37,7 +37,7 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
     }
 
     @Override
-    public UserBasicInfo convertToUserBasicInfo(OAuth2AuthenticationToken authenticationToken) {
+    public UserBasicInfo convertToUserBasicInfo(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
 
         String nickname, avatar;
 
@@ -49,7 +49,7 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            return null;
+            throw new UnexpectedException(e.getMessage());
         }
 
         UserBasicInfo userBasicInfo = new UserBasicInfo();
