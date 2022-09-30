@@ -1,10 +1,11 @@
 package com.moyu.oauth2.client.manager.context;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MapBasedContext implements Context {
 
-    private Map<Object, Object> context;
+    private final Map<Object, Object> context = new HashMap<>();
 
     @Override
     public Object get(Object key) {

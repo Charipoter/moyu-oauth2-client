@@ -1,9 +1,9 @@
 package com.moyu.oauth2.client.manager.login.convert;
 
+import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
 import com.moyu.oauth2.client.model.UserAuthInfo;
 import com.moyu.oauth2.client.model.UserBasicInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 import java.rmi.UnexpectedException;
 
@@ -11,47 +11,40 @@ import java.rmi.UnexpectedException;
 public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConverter {
 
     @Override
-    public UserAuthInfo convertToUserAuthInfo(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
-
-        String authType, authPrincipal, authCredential;
+    public UserAuthInfo convertToUserAuthInfo(OAuth2LoginPostProcessorContext context) throws UnexpectedException {
 
         try {
-            authType = resolveAuthType(authenticationToken);
-            authPrincipal = resolvePrincipal(authenticationToken, authType);
-            authCredential = resolveCredential(authenticationToken, authType, authPrincipal);
+            context.putAuthType(resolveAuthType(context));
+            context.putPrincipal(resolvePrincipal(context));
+            context.putCredential(resolveCredential(context));
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new UnexpectedException(e.getMessage());
         }
 
-        return UserAuthInfo.atLeast(authType, authPrincipal, authCredential);
+        return UserAuthInfo.atLeast(context.getAuthType(), context.getPrincipal(), context.getCredential());
     }
 
     @Override
-    public UserBasicInfo convertToUserBasicInfo(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
-
-        String nickname, avatar;
+    public UserBasicInfo convertToUserBasicInfo(OAuth2LoginPostProcessorContext context) throws UnexpectedException {
 
         try {
-            nickname = resolveNickname(authenticationToken);
-            avatar = resolveAvatar(authenticationToken);
+            context.putNickname(resolveNickname(context));
+            context.putAvatar(resolveAvatar(context));
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new UnexpectedException(e.getMessage());
         }
 
-        return UserBasicInfo.atLeast(nickname, avatar);
+        return UserBasicInfo.atLeast(context.getNickname(), context.getAvatar());
     }
-    private String resolveAuthType(OAuth2AuthenticationToken authenticationToken) {
-        return authenticationToken.getAuthorizedClientRegistrationId();
+    private String resolveAuthType(OAuth2LoginPostProcessorContext context) {
+        return context.getAuthentication().getAuthorizedClientRegistrationId();
     }
-    protected abstract String resolvePrincipal(OAuth2AuthenticationToken authenticationToken,
-                                               String authType) throws UnexpectedException;
+    protected abstract String resolvePrincipal(OAuth2LoginPostProcessorContext context) throws UnexpectedException;
 
-    protected abstract String resolveCredential(OAuth2AuthenticationToken authenticationToken,
-                                                String authType,
-                                                String authPrincipal) throws UnexpectedException;
+    protected abstract String resolveCredential(OAuth2LoginPostProcessorContext context) throws UnexpectedException;
 
-    protected abstract String resolveNickname(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException;
-    protected abstract String resolveAvatar(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException;
+    protected abstract String resolveNickname(OAuth2LoginPostProcessorContext context) throws UnexpectedException;
+    protected abstract String resolveAvatar(OAuth2LoginPostProcessorContext context) throws UnexpectedException;
 }

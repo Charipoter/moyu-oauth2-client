@@ -1,7 +1,7 @@
 package com.moyu.oauth2.client.manager.login.convert;
 
+import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
 import com.moyu.oauth2.client.manager.login.convert.key.UserInfoKeyProvider;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 import java.rmi.UnexpectedException;
 
@@ -12,7 +12,7 @@ public class AbstractLocalCredentialUserInfoConverter extends AbstractAttributes
     }
 
     @Override
-    protected String resolveCredential(OAuth2AuthenticationToken authenticationToken, String authType, String authPrincipal) throws UnexpectedException {
-        return resolveFromAttributes(authenticationToken, keyProvider.getCredentialKey());
+    protected String resolveCredential(OAuth2LoginPostProcessorContext context) throws UnexpectedException {
+        return resolveFromAttributes(context, keyProvider.getCredentialKey());
     }
 }

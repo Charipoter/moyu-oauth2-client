@@ -1,9 +1,9 @@
 package com.moyu.oauth2.client.manager.login.convert;
 
+import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
 import com.moyu.oauth2.client.manager.login.convert.key.UserInfoKeyProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 public abstract class AbstractThirdPartyCredentialUserInfoConverter extends AbstractAttributesBasedUserInfoConverter {
 
@@ -16,8 +16,8 @@ public abstract class AbstractThirdPartyCredentialUserInfoConverter extends Abst
         this.authorizedClientService = authorizedClientService;
     }
     @Override
-    protected String resolveCredential(OAuth2AuthenticationToken authenticationToken, String authType, String authPrincipal) {
-        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(authType, authPrincipal);
+    protected String resolveCredential(OAuth2LoginPostProcessorContext context) {
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(context.getAuthType(), context.getPrincipal());
         return client.getAccessToken().getTokenValue();
     }
 }

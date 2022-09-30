@@ -1,5 +1,6 @@
 package com.moyu.oauth2.client.manager.login;
 
+import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
 import com.moyu.oauth2.client.manager.login.convert.OAuth2UserInfoConverter;
 import com.moyu.oauth2.client.model.TokenResponseVo;
 import com.moyu.oauth2.client.model.UserAuthInfo;
@@ -24,19 +25,19 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
     public TokenResponseVo postProcessAfterAuthentication(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
         assert userInfoConverter != null;
 
-        UserAuthInfo userAuthInfo;
-        UserBasicInfo userBasicInfo;
+        OAuth2LoginPostProcessorContext context = new OAuth2LoginPostProcessorContext();
+        context.putAuthentication(authenticationToken);
 
         try {
-            userAuthInfo = userInfoConverter.convertToUserAuthInfo(authenticationToken);
-            userBasicInfo = userInfoConverter.convertToUserBasicInfo(authenticationToken);
+            context.putUserAuthInfo(userInfoConverter.convertToUserAuthInfo(context));
+            context.putUserBasicInfo(userInfoConverter.convertToUserBasicInfo(context));
         } catch (Exception e) {
             log.error("属性解析出现了异常：" + e.getMessage());
             throw e;
         }
 
-        if (userAuthInfo != null && userBasicInfo != null) {
-            return postProcessWithUserInfo(authenticationToken, userAuthInfo, userBasicInfo);
+        if (context.containsUserInfo()) {
+            return postProcessWithUserInfo(context);
         } else {
             log.warn("用户属性解析为 null，却并没有抛出异常");
             return null;
@@ -46,9 +47,10 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
     /**
      * 该方法出错需要进行事务回滚
      */
-    private TokenResponseVo postProcessWithUserInfo(OAuth2AuthenticationToken authenticationToken,
-                                                    UserAuthInfo userAuthInfo,
-                                                    UserBasicInfo userBasicInfo) {
+    private TokenResponseVo postProcessWithUserInfo(OAuth2LoginPostProcessorContext context) {
+
+        UserAuthInfo userAuthInfo = context.getUserAuthInfo();
+        UserBasicInfo userBasicInfo = context.getUserBasicInfo();
 
         UserAuthInfo existUserAuthInfo = userAuthInfoService.getOneByTypeAndPrincipal(
                 userAuthInfo.getAuthType(), userAuthInfo.getAuthPrincipal()
@@ -79,6 +81,8 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
             userBasicInfoService.save(userBasicInfo);
             // 绑定 userId
             userAuthInfo.setUserId(userBasicInfo.getId());
+
+            context.thisIsANewUser();
         }
         // 存储认证信息
         if (foundUserAuthInfo) {
@@ -87,15 +91,12 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
             userAuthInfoService.save(userAuthInfo);
         }
 
-        return reGenerateToken(authenticationToken, userAuthInfo, userBasicInfo, newUser);
+        return reGenerateToken(context);
     }
 
-    private TokenResponseVo reGenerateToken(OAuth2AuthenticationToken authenticationToken,
-                                            UserAuthInfo userAuthInfo,
-                                            UserBasicInfo userBasicInfo,
-                                            boolean newUser) {
+    private TokenResponseVo reGenerateToken(OAuth2LoginPostProcessorContext context) {
 
-        if (newUser) {
+        if (context.newUser()) {
             // 直接分配新用户角色
         } else {
             // 查询已有权限
@@ -104,7 +105,7 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
         // 构建信息
         UserDetails userDetails = null;
         // 生成 token
-        return null;
+        return TokenResponseVo.builder().more(context).build();
     }
 
 }
