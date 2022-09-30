@@ -16,7 +16,7 @@ import java.rmi.UnexpectedException;
 
 @Slf4j
 @AllArgsConstructor
-public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPostProcessor {
+public class DefaultOAuth2LoginPostProcessor implements OAuth2LoginPostProcessor {
 
     private OAuth2UserInfoConverter userInfoConverter;
     private UserAuthInfoService userAuthInfoService;

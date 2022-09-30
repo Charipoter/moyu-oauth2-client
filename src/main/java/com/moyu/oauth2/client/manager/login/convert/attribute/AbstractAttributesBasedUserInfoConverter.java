@@ -1,7 +1,8 @@
-package com.moyu.oauth2.client.manager.login.convert;
+package com.moyu.oauth2.client.manager.login.convert.attribute;
 
 import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
-import com.moyu.oauth2.client.manager.login.convert.key.UserInfoKeyProvider;
+import com.moyu.oauth2.client.manager.login.convert.AbstractUserInfoConverter;
+import com.moyu.oauth2.client.manager.login.convert.attribute.key.UserInfoKeyProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import java.rmi.UnexpectedException;
@@ -12,7 +13,7 @@ public abstract class AbstractAttributesBasedUserInfoConverter extends AbstractU
 
     protected UserInfoKeyProvider keyProvider;
 
-    AbstractAttributesBasedUserInfoConverter(UserInfoKeyProvider keyProvider) {
+    public AbstractAttributesBasedUserInfoConverter(UserInfoKeyProvider keyProvider) {
         this.keyProvider = keyProvider;
     }
     @Override

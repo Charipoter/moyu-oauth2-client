@@ -1,13 +1,13 @@
-package com.moyu.oauth2.client.manager.login.convert;
+package com.moyu.oauth2.client.manager.login.convert.attribute;
 
 import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
-import com.moyu.oauth2.client.manager.login.convert.key.UserInfoKeyProvider;
+import com.moyu.oauth2.client.manager.login.convert.attribute.key.UserInfoKeyProvider;
 
 import java.rmi.UnexpectedException;
 
-public class AbstractLocalCredentialUserInfoConverter extends AbstractAttributesBasedUserInfoConverter {
+public class LocalAttributesBasedUserInfoConverter extends AbstractAttributesBasedUserInfoConverter {
 
-    AbstractLocalCredentialUserInfoConverter(UserInfoKeyProvider keyProvider) {
+    public LocalAttributesBasedUserInfoConverter(UserInfoKeyProvider keyProvider) {
         super(keyProvider);
     }
 

@@ -1,4 +1,4 @@
-package com.moyu.oauth2.client.manager.login.convert.key;
+package com.moyu.oauth2.client.manager.login.convert.attribute.key;
 
 import org.springframework.stereotype.Component;
 

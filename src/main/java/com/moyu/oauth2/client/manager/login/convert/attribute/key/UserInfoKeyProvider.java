@@ -1,4 +1,4 @@
-package com.moyu.oauth2.client.manager.login.convert.key;
+package com.moyu.oauth2.client.manager.login.convert.attribute.key;
 
 /**
  * 实现一定要仔细，否则会导致业务异常
