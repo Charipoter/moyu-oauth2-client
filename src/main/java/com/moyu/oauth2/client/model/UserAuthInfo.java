@@ -46,4 +46,12 @@ public class UserAuthInfo implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public static UserAuthInfo atLeast(String authType, String authPrincipal, String authCredential) {
+        UserAuthInfo userAuthInfo = new UserAuthInfo();
+        userAuthInfo.setAuthType(authType);
+        userAuthInfo.setAuthPrincipal(authPrincipal);
+        userAuthInfo.setAuthCredential(authCredential);
+        return userAuthInfo;
+    }
 }

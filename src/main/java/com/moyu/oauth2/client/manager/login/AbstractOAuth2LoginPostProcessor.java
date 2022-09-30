@@ -8,6 +8,7 @@ import com.moyu.oauth2.client.service.UserAuthInfoService;
 import com.moyu.oauth2.client.service.UserBasicInfoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 import java.rmi.UnexpectedException;
@@ -35,19 +36,19 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
         }
 
         if (userAuthInfo != null && userBasicInfo != null) {
-            postProcessWithUserInfo(userAuthInfo, userBasicInfo);
+            return postProcessWithUserInfo(authenticationToken, userAuthInfo, userBasicInfo);
         } else {
             log.warn("用户属性解析为 null，却并没有抛出异常");
             return null;
         }
-        // 根据处理后的用户数据重新生成 token
-        return wrapperOrReGenerateToken(authenticationToken, userAuthInfo, userBasicInfo);
     }
 
     /**
      * 该方法出错需要进行事务回滚
      */
-    private void postProcessWithUserInfo(UserAuthInfo userAuthInfo, UserBasicInfo userBasicInfo) {
+    private TokenResponseVo postProcessWithUserInfo(OAuth2AuthenticationToken authenticationToken,
+                                                    UserAuthInfo userAuthInfo,
+                                                    UserBasicInfo userBasicInfo) {
 
         UserAuthInfo existUserAuthInfo = userAuthInfoService.getOneByTypeAndPrincipal(
                 userAuthInfo.getAuthType(), userAuthInfo.getAuthPrincipal()
@@ -85,12 +86,24 @@ public abstract class AbstractOAuth2LoginPostProcessor implements OAuth2LoginPos
         } else {
             userAuthInfoService.save(userAuthInfo);
         }
+
+        return reGenerateToken(authenticationToken, userAuthInfo, userBasicInfo, newUser);
     }
 
-    private TokenResponseVo wrapperOrReGenerateToken(OAuth2AuthenticationToken authenticationToken,
-                                                     UserAuthInfo userAuthInfo,
-                                                     UserBasicInfo userBasicInfo) {
+    private TokenResponseVo reGenerateToken(OAuth2AuthenticationToken authenticationToken,
+                                            UserAuthInfo userAuthInfo,
+                                            UserBasicInfo userBasicInfo,
+                                            boolean newUser) {
 
+        if (newUser) {
+            // 直接分配新用户角色
+        } else {
+            // 查询已有权限
+        }
+
+        // 构建信息
+        UserDetails userDetails = null;
+        // 生成 token
         return null;
     }
 

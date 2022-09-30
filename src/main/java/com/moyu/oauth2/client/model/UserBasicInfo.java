@@ -40,4 +40,11 @@ public class UserBasicInfo implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public static UserBasicInfo atLeast(String nickname, String avatar) {
+        UserBasicInfo userBasicInfo = new UserBasicInfo();
+        userBasicInfo.setNickname(nickname);
+        userBasicInfo.setAvatar(avatar);
+        return userBasicInfo;
+    }
 }

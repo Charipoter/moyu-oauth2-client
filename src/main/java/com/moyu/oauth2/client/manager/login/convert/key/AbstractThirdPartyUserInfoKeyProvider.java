@@ -5,4 +5,9 @@ public abstract class AbstractThirdPartyUserInfoKeyProvider implements UserInfoK
     public String getCredentialKey() {
         return "";
     }
+
+    @Override
+    public UserInfoKeyProviderType getType() {
+        return UserInfoKeyProviderType.THIRD_PARTY;
+    }
 }

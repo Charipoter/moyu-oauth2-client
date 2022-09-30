@@ -18,9 +18,4 @@ public class GiteeUserInfoKeyProvider extends AbstractThirdPartyUserInfoKeyProvi
     public String getAvatarKey() {
         return "avatar_url";
     }
-
-    @Override
-    public UserInfoKeyProviderType getType() {
-        return UserInfoKeyProviderType.THIRD_PARTY;
-    }
 }

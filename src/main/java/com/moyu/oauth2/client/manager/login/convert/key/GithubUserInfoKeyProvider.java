@@ -20,9 +20,4 @@ public class GithubUserInfoKeyProvider extends AbstractThirdPartyUserInfoKeyProv
         return "avatar_url";
     }
 
-    @Override
-    public UserInfoKeyProviderType getType() {
-        return UserInfoKeyProviderType.THIRD_PARTY;
-    }
-
 }

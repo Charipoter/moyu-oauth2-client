@@ -16,24 +16,15 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
         String authType, authPrincipal, authCredential;
 
         try {
-
             authType = resolveAuthType(authenticationToken);
-
             authPrincipal = resolvePrincipal(authenticationToken, authType);
-
             authCredential = resolveCredential(authenticationToken, authType, authPrincipal);
-
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new UnexpectedException(e.getMessage());
         }
 
-        UserAuthInfo userAuthInfo = new UserAuthInfo();
-        userAuthInfo.setAuthType(authType);
-        userAuthInfo.setAuthPrincipal(authPrincipal);
-        userAuthInfo.setAuthCredential(authCredential);
-
-        return userAuthInfo;
+        return UserAuthInfo.atLeast(authType, authPrincipal, authCredential);
     }
 
     @Override
@@ -42,21 +33,14 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
         String nickname, avatar;
 
         try {
-
             nickname = resolveNickname(authenticationToken);
-
             avatar = resolveAvatar(authenticationToken);
-
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new UnexpectedException(e.getMessage());
         }
 
-        UserBasicInfo userBasicInfo = new UserBasicInfo();
-        userBasicInfo.setNickname(nickname);
-        userBasicInfo.setAvatar(avatar);
-
-        return userBasicInfo;
+        return UserBasicInfo.atLeast(nickname, avatar);
     }
     private String resolveAuthType(OAuth2AuthenticationToken authenticationToken) {
         return authenticationToken.getAuthorizedClientRegistrationId();
