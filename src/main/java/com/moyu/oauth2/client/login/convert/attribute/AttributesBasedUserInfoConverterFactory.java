@@ -1,8 +1,8 @@
-package com.moyu.oauth2.client.manager.login.convert.attribute;
+package com.moyu.oauth2.client.login.convert.attribute;
 
-import com.moyu.oauth2.client.manager.login.convert.OAuth2UserInfoConverter;
-import com.moyu.oauth2.client.manager.login.convert.attribute.key.UserInfoKeyProvider;
-import com.moyu.oauth2.client.manager.login.convert.attribute.key.UserInfoKeyProviderType;
+import com.moyu.oauth2.client.login.convert.OAuth2UserInfoConverter;
+import com.moyu.oauth2.client.login.convert.attribute.key.UserInfoKeyProvider;
+import com.moyu.oauth2.client.login.convert.attribute.key.UserInfoKeyProviderType;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 
 public class AttributesBasedUserInfoConverterFactory {

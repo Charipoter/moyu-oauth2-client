@@ -1,4 +1,4 @@
-package com.moyu.oauth2.client.manager.login;
+package com.moyu.oauth2.client.login;
 
 import com.moyu.oauth2.client.model.TokenResponseVo;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;

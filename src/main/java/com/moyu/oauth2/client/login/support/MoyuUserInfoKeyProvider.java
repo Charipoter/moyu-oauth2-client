@@ -1,5 +1,7 @@
-package com.moyu.oauth2.client.manager.login.convert.attribute.key;
+package com.moyu.oauth2.client.login.support;
 
+import com.moyu.oauth2.client.login.convert.attribute.key.UserInfoKeyProvider;
+import com.moyu.oauth2.client.login.convert.attribute.key.UserInfoKeyProviderType;
 import org.springframework.stereotype.Component;
 
 @Component

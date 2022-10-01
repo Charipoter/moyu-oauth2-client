@@ -1,4 +1,4 @@
-package com.moyu.oauth2.client.manager.context;
+package com.moyu.oauth2.client.common.context;
 
 import com.moyu.oauth2.client.model.UserAuthInfo;
 import com.moyu.oauth2.client.model.UserBasicInfo;

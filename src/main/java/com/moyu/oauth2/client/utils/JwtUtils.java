@@ -1,6 +1,6 @@
 package com.moyu.oauth2.client.utils;
 
-import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
+import com.moyu.oauth2.client.common.context.OAuth2LoginPostProcessorContext;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -46,7 +46,8 @@ public class JwtUtils {
                 .issuedAt(issuedAt)
                 .expiresAt(expiresAt)
                 .claim("scope", context.getAuthorities())
-                .claim("user", context.getUserBasicInfo());
+                .claim("userId", context.getUserBasicInfo().getId())
+                .claim("nickname", context.getUserBasicInfo().getNickname());
 
         JwsHeader.Builder headersBuilder = JwsHeader.with(SignatureAlgorithm.RS256);
         JwsHeader headers = headersBuilder.build();

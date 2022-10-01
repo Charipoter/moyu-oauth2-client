@@ -1,7 +1,7 @@
-package com.moyu.oauth2.client.manager.login.convert.attribute;
+package com.moyu.oauth2.client.login.convert.attribute;
 
-import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
-import com.moyu.oauth2.client.manager.login.convert.attribute.key.UserInfoKeyProvider;
+import com.moyu.oauth2.client.common.context.OAuth2LoginPostProcessorContext;
+import com.moyu.oauth2.client.login.convert.attribute.key.UserInfoKeyProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 

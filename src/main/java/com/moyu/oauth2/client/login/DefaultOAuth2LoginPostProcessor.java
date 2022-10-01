@@ -1,9 +1,9 @@
-package com.moyu.oauth2.client.manager.login;
+package com.moyu.oauth2.client.login;
 
-import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
-import com.moyu.oauth2.client.manager.login.convert.OAuth2UserInfoConverter;
-import com.moyu.oauth2.client.manager.login.convert.attribute.AttributesBasedUserInfoConverterFactory;
-import com.moyu.oauth2.client.manager.login.convert.attribute.key.UserInfoKeyProvider;
+import com.moyu.oauth2.client.common.context.OAuth2LoginPostProcessorContext;
+import com.moyu.oauth2.client.login.convert.OAuth2UserInfoConverter;
+import com.moyu.oauth2.client.login.convert.attribute.AttributesBasedUserInfoConverterFactory;
+import com.moyu.oauth2.client.login.convert.attribute.key.UserInfoKeyProvider;
 import com.moyu.oauth2.client.model.*;
 import com.moyu.oauth2.client.service.*;
 import com.moyu.oauth2.client.utils.JwtUtils;

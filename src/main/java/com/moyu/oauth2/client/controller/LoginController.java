@@ -1,7 +1,7 @@
 package com.moyu.oauth2.client.controller;
 
 import com.moyu.oauth2.client.common.http.R;
-import com.moyu.oauth2.client.manager.login.DefaultOAuth2LoginPostProcessor;
+import com.moyu.oauth2.client.login.DefaultOAuth2LoginPostProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

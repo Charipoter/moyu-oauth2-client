@@ -1,6 +1,6 @@
-package com.moyu.oauth2.client.manager.login.convert;
+package com.moyu.oauth2.client.login.convert;
 
-import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
+import com.moyu.oauth2.client.common.context.OAuth2LoginPostProcessorContext;
 import com.moyu.oauth2.client.model.UserAuthInfo;
 import com.moyu.oauth2.client.model.UserBasicInfo;
 import lombok.extern.slf4j.Slf4j;
