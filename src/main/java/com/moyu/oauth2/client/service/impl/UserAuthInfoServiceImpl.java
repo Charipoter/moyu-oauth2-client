@@ -18,16 +18,6 @@ public class UserAuthInfoServiceImpl extends ServiceImpl<UserAuthInfoMapper, Use
     implements UserAuthInfoService{
 
     @Override
-    public boolean containsUserAuthInfo(UserAuthInfo userAuthInfo) {
-        UserAuthInfo authInfo = getOne(new LambdaQueryWrapper<UserAuthInfo>()
-                .eq(UserAuthInfo::getAuthPrincipal, userAuthInfo.getAuthPrincipal())
-                .eq(UserAuthInfo::getAuthType, userAuthInfo.getAuthType())
-        );
-
-        return authInfo != null;
-    }
-
-    @Override
     public boolean updateByTypeAndPrincipal(UserAuthInfo userAuthInfo) {
         // TODO 是否只需要更新凭证
         return update(new LambdaUpdateWrapper<UserAuthInfo>()

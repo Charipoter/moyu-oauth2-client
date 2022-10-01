@@ -9,9 +9,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-09-28 17:11:18
 */
 public interface UserAuthInfoService extends IService<UserAuthInfo> {
-
-    boolean containsUserAuthInfo(UserAuthInfo userAuthInfo);
-
     boolean updateByTypeAndPrincipal(UserAuthInfo userAuthInfo);
 
     UserAuthInfo getOneByTypeAndPrincipal(String authType, String authPrincipal);
