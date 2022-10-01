@@ -4,6 +4,8 @@ import com.moyu.oauth2.client.model.UserAuthInfo;
 import com.moyu.oauth2.client.model.UserBasicInfo;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
+import java.util.List;
+
 public class OAuth2LoginPostProcessorContext extends MapBasedContext {
 
     private static final String AUTH_TYPE_KEY = "authType";
@@ -14,6 +16,9 @@ public class OAuth2LoginPostProcessorContext extends MapBasedContext {
     private static final String AVATAR_KEY = "avatar";
     private static final String USER_AUTH_INFO_KEY = "userAuthInfo";
     private static final String USER_BASIC_INFO_KEY = "userBasicInfo";
+    private static final String USER_DETAILS_KEY = "userDetails";
+
+    private static final String AUTHORITIES_KEY = "scope";
 
     private boolean isNewUser;
 
@@ -78,6 +83,13 @@ public class OAuth2LoginPostProcessorContext extends MapBasedContext {
 
     public UserBasicInfo getUserBasicInfo() {
         return (UserBasicInfo) get(USER_BASIC_INFO_KEY);
+    }
+
+    public void putAuthorities(List<String> authorities) {
+        put(AUTHORITIES_KEY, authorities);
+    }
+    public List<String> getAuthorities() {
+        return (List<String>) get(AUTHORITIES_KEY);
     }
 
     public boolean containsUserInfo() {

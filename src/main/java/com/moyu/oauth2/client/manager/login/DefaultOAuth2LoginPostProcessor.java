@@ -2,28 +2,67 @@ package com.moyu.oauth2.client.manager.login;
 
 import com.moyu.oauth2.client.manager.context.OAuth2LoginPostProcessorContext;
 import com.moyu.oauth2.client.manager.login.convert.OAuth2UserInfoConverter;
-import com.moyu.oauth2.client.model.TokenResponseVo;
-import com.moyu.oauth2.client.model.UserAuthInfo;
-import com.moyu.oauth2.client.model.UserBasicInfo;
-import com.moyu.oauth2.client.service.UserAuthInfoService;
-import com.moyu.oauth2.client.service.UserBasicInfoService;
-import lombok.AllArgsConstructor;
+import com.moyu.oauth2.client.manager.login.convert.attribute.AttributesBasedUserInfoConverterFactory;
+import com.moyu.oauth2.client.manager.login.convert.attribute.key.UserInfoKeyProvider;
+import com.moyu.oauth2.client.model.*;
+import com.moyu.oauth2.client.service.*;
+import com.moyu.oauth2.client.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.rmi.UnexpectedException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
-@AllArgsConstructor
+@Component
 public class DefaultOAuth2LoginPostProcessor implements OAuth2LoginPostProcessor {
-
-    private OAuth2UserInfoConverter userInfoConverter;
+    @Autowired
+    private OAuth2AuthorizedClientService authorizedClientService;
+    @Autowired
     private UserAuthInfoService userAuthInfoService;
+    @Autowired
     private UserBasicInfoService userBasicInfoService;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
+    @Autowired
+    private RolePermissionService rolePermissionService;
+    private final Map<String, OAuth2UserInfoConverter> converterMap = new HashMap<>();
+
+    public DefaultOAuth2LoginPostProcessor(List<UserInfoKeyProvider> keyProviders,
+                                           OAuth2AuthorizedClientService authorizedClientService) {
+
+        int suffixLength = UserInfoKeyProvider.class.getSimpleName().length();
+        for (UserInfoKeyProvider keyProvider : keyProviders) {
+
+            String fullName = keyProvider.getClass().getSimpleName();
+            String authType = fullName.substring(0, fullName.length() - suffixLength).toLowerCase();
+
+            OAuth2UserInfoConverter converter = AttributesBasedUserInfoConverterFactory.get(
+                    authorizedClientService,
+                    keyProvider
+            );
+
+            converterMap.put(authType, converter);
+        }
+
+    }
     @Override
     public TokenResponseVo postProcessAfterAuthentication(OAuth2AuthenticationToken authenticationToken) throws UnexpectedException {
-        assert userInfoConverter != null;
+
+        OAuth2UserInfoConverter userInfoConverter = converterMap.get(authenticationToken.getAuthorizedClientRegistrationId());
+
+        assert userInfoConverter != null : "找不到匹配的转换器";
 
         OAuth2LoginPostProcessorContext context = new OAuth2LoginPostProcessorContext();
         context.putAuthentication(authenticationToken);
@@ -47,7 +86,8 @@ public class DefaultOAuth2LoginPostProcessor implements OAuth2LoginPostProcessor
     /**
      * 该方法出错需要进行事务回滚
      */
-    private TokenResponseVo postProcessWithUserInfo(OAuth2LoginPostProcessorContext context) {
+    @Transactional
+    protected TokenResponseVo postProcessWithUserInfo(OAuth2LoginPostProcessorContext context) {
 
         UserAuthInfo userAuthInfo = context.getUserAuthInfo();
         UserBasicInfo userBasicInfo = context.getUserBasicInfo();
@@ -96,16 +136,25 @@ public class DefaultOAuth2LoginPostProcessor implements OAuth2LoginPostProcessor
 
     private TokenResponseVo reGenerateToken(OAuth2LoginPostProcessorContext context) {
 
+        Long userId = context.getUserBasicInfo().getId();
+
         if (context.newUser()) {
             // 直接分配新用户角色
-        } else {
-            // 查询已有权限
+            // 分配新用户角色并存储
+            UserRole userRole = UserRole.builder().roleId(1L).userId(userId).build();
+            userRoleService.save(userRole);
         }
-
+        // 查询用户权限
+        List<Permission> permissions = permissionService.getByUserId(userId);
         // 构建信息
-        UserDetails userDetails = null;
+        List<String> authorities = permissions.stream()
+                .map(Permission::getName)
+                .toList();
+        context.putAuthorities(authorities);
         // 生成 token
-        return TokenResponseVo.builder().more(context).build();
+        Jwt jwt = JwtUtils.generate(context);
+
+        return TokenResponseVo.builder().tokenValue(jwt.getTokenValue()).build();
     }
 
 }

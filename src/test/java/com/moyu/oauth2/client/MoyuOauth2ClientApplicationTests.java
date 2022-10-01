@@ -8,6 +8,7 @@ class MoyuOauth2ClientApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

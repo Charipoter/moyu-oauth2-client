@@ -1,7 +1,7 @@
 package com.moyu.oauth2.client.controller;
 
 import com.moyu.oauth2.client.common.http.R;
-import com.moyu.oauth2.client.manager.login.AttributesBasedLoginPostProcessorManager;
+import com.moyu.oauth2.client.manager.login.DefaultOAuth2LoginPostProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,17 +16,17 @@ import java.io.IOException;
 @RestController
 public class LoginController {
     @Autowired
-    private AttributesBasedLoginPostProcessorManager loginPostProcessorManager;
+    private DefaultOAuth2LoginPostProcessor loginPostProcessor;
     /**
      * 到达这里后已经认证完成了
      */
     @GetMapping("/login/oauth2")
     public R login(Authentication authentication) throws IOException {
-        assert loginPostProcessorManager != null : "loginPostProcessor 为 null";
+        assert loginPostProcessor != null : "loginPostProcessor 为 null";
 
         if (authentication instanceof OAuth2AuthenticationToken authenticationToken) {
             try {
-                return R.ok(loginPostProcessorManager.postProcessAfterAuthentication(authenticationToken));
+                return R.ok(loginPostProcessor.postProcessAfterAuthentication(authenticationToken));
             } catch (Exception e) {
                 return R.error(e.getMessage());
             }
