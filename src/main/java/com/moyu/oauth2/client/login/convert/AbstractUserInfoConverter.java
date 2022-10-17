@@ -19,7 +19,7 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
             context.putCredential(resolveCredential(context));
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new UnexpectedException(e.getMessage());
+            throw new UnexpectedException(e.getMessage(), e);
         }
 
         return UserAuthInfo.atLeast(context.getAuthType(), context.getPrincipal(), context.getCredential());
@@ -33,7 +33,7 @@ public abstract class AbstractUserInfoConverter implements OAuth2UserInfoConvert
             context.putAvatar(resolveAvatar(context));
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new UnexpectedException(e.getMessage());
+            throw new UnexpectedException(e.getMessage(), e);
         }
 
         return UserBasicInfo.atLeast(context.getNickname(), context.getAvatar());
